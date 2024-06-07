@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="view_livechat_channel_form_inherit" model="ir.ui.view">
+            <field name="name">im_livechat.channel.form.inherit</field>
+            <field name="model">im_livechat.channel</field>
+            <field name="inherit_id" ref="im_livechat.view_livechat_channel_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/notebook/page[@string='Options']" position="inside">
+                    <group>
+                        <field name="is_chatbot"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
