@@ -177,7 +177,7 @@ class ChatConfig(models.Model):
         flow = InstalledAppFlow.from_client_secrets_file(
             '/opt/odoo17/client_secret.json',
             scopes=SCOPES)
-        creds = flow.run_local_server(port=8080,open_browser=True,redirect_uri_trailing_slash=False)
+        creds = flow.run_local_server(port=8080,redirect_uri_trailing_slash=False)
         # session = flow.authorized_session()
         with open('/opt/odoo17/refresh.json','w') as url:
             print('creds.to_json()',creds)
