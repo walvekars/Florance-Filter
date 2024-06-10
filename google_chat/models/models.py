@@ -7,12 +7,36 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 import os
 import inspect
-
-from google_auth_oauthlib.flow import InstalledAppFlow
-
+import io
+import sys
+import json
+# from google_auth_oauthlib.flow import InstalledAppFlow
+from .Overridegoogle import InstalledAppFlow
+import webbrowser
 
 class Chatbot(models.Model):
     _inherit = 'im_livechat.channel'
+
+    @api.model
+    def get_mail_channel(self, uuid):
+        channel = super(Chatbot, self).get_mail_channel(uuid)
+        print('ddddddddddddddddddddddd', channel)
+        self.env['mail.channel'].browse(channel['id']).message_post(body="Hello! How can I assist you today?")
+        return channel
+
+    @api.model
+    def post_message(self, uuid, message_content, custom_data):
+        channel = self.env['mail.channel'].search([('uuid', '=', uuid)])
+        print('channekllllll', channel)
+        if channel:
+            response = self.get_bot_response(message_content)
+            channel.message_post(body=response)
+        return True
+
+    def get_bot_response(self, message_content):
+        # Implement your bot logic here
+        # For simplicity, echo the user's message
+        return f"You said: {message_content}"
 
 
 class DiscussChannelNew(models.Model):
@@ -23,7 +47,9 @@ class DiscussChannelNew(models.Model):
 
     _inherit = 'discuss.channel'
 
-
+    channel_type = fields.Selection(
+        selection_add=[('livechat', 'Livechat Conversation'), ('google_chat', "Google Chat Conversation")],
+        ondelete={'google_chat': 'cascade'})
     customer_info_id=fields.Many2one('google.chat.customer.info',sting="chat info")
 
     def _message_post_after_hook(self, message, msg_vals):
@@ -46,12 +72,15 @@ class DiscussChannelNewshsh(models.Model):
     def send_chat(self, message):
         # print('kwarg',kwarg)
         # print('kwarg',kwarg.get('message', False))
-        live_chat_id=self.env['discuss.channel'].search([('livechat_active','=',True)],limit=1)
+        current_visitor = self.env['website.visitor']._get_visitor_from_request()
+        # for current in current_visitor:
+        live_chat_id=self.env['discuss.channel'].search([('livechat_active','=',True),('livechat_visitor_id','=',current_visitor.id)],limit=1)
 
         SCOPES = ['https://www.googleapis.com/auth/chat.bot']
-        service_account_file = os.path.join(os.getcwd(), 'custom_addons/google_chat/static/testprojectflorence111 - cec587533a5d.json')
 
-        CREDENTIALS = service_account.Credentials.from_service_account_file(service_account_file, scopes=SCOPES)
+        CREDENTIALS = service_account.Credentials.from_service_account_file(
+            '/home/ram/Downloads/testprojectflorence111-cec587533a5d.json', scopes=SCOPES)
+        print('===============================================')
         # data=request.env['mail.message'].create({'email_from':'sjsjj@gmail.com'})
         # return request.render('google_chat.website.contactus',{})
         chat = build('chat', 'v1', credentials=CREDENTIALS)
@@ -64,10 +93,11 @@ class DiscussChannelNewshsh(models.Model):
             # Replace SPACE with a space name.
             # Obtain the space name from the spaces resource of Chat API,
             # or from a space's URL.
-            parent=live_chat_id.customer_info_id.space_name,
+            parent=live_chat_id.livechat_visitor_id.space,
             body={'text':message}
 
         ).execute()
+        print('resultresultresultresultresult',result)
         return result
 
 
@@ -132,12 +162,36 @@ class ChatConfig(models.Model):
 
     _name = 'chat.config'
     name=fields.Char(string="Name")
+    log_date=fields.Char()
 
     # customer_info_id=fields.Many2one('google.chat.customer.info',sting="chat info")
 
     def action_approve_scopes(self):
-        directory_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+        # webbrowser.open_new("https://www.javatpoint.com/pyqt-library-in-python")
+        SCOPES = ["https://www.googleapis.com/auth/chat.spaces.create",
+                  "https://www.googleapis.com/auth/chat.memberships",
+                  "https://www.googleapis.com/auth/chat.messages.create",
+                  "https://www.googleapis.com/auth/chat.memberships.app",'https://www.googleapis.com/auth/adwords']
+        sco=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']
+
+        flow = InstalledAppFlow.from_client_secrets_file(
+            '/home/ram/Downloads/client_secret_371504125361-54cee55t5kkje5ic6sp8dt2e4of92lru.apps.googleusercontent.com (2).json',
+            scopes=SCOPES)
+        creds = flow.run_local_server(port=8080,open_browser=True,redirect_uri_trailing_slash=False)
+        # session = flow.authorized_session()
+        with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/refresh.json','w') as url:
+            print('creds.to_json()',creds)
+            creds_val=json.loads(creds.to_json())
+            print('creds.to_json()',creds_val)
+
+            creds_val.update({'refresh_token':creds_val['token']})
+            url.write(json.dumps(creds_val))
+        # print('sesssssssssssion',session)
+
+    # print('customerrrrrrrrrrrr')
+        # directory_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
         # full_path = os.path.join(directory_path, 'sjsjjs.json')
+        # print('full_path', full_path)
 
         # SCOPES = ["https://www.googleapis.com/auth/chat.spaces.create",
         #           "https://www.googleapis.com/auth/chat.memberships",
@@ -156,3 +210,9 @@ class ChatConfig(models.Model):
 
         # print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv',v,flow.credentials)
 
+
+
+class WebsiteVisitorTrack(models.Model):
+    _inherit = 'website.visitor'
+
+    space=fields.Char(string='Google chat space')

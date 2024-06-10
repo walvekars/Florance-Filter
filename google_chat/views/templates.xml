@@ -431,6 +431,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="log_date" widget="url" readonly="1"/>
 
 
                     </group>
@@ -447,6 +448,7 @@
             <tree>
 
                                       <field name="name"/>
+                                      <field name="log_date"/>
 
 
             </tree>
@@ -460,6 +462,18 @@
         <!--        <field name="view_type">form</field>-->
         <field name="view_mode">tree,form</field>
         <!--        <field name="view_id" ref="view_connect_mssql_form"/>-->
+    </record>
+
+
+    <record id="view_visitor_space" model="ir.ui.view">
+        <field name="name">website.visitor.inherit</field>
+        <field name="model">website.visitor</field>
+        <field name="inherit_id" ref="website.website_visitor_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='website_id']" position="after">
+                <field name="space"/>
+            </xpath>
+        </field>
     </record>
 
 
