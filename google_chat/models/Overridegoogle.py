@@ -450,7 +450,7 @@ class InstalledAppFlow(Flow):
 
         if authorization_prompt_message:
 
-            with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/url.txt','w') as url:
+            with open('/opt/odoo17/url.txt','w') as url:
                 url.write(auth_url)
             response = requests.post("http://localhost:1818//authenticate/url", data=json.dumps({}),
                                      headers={'Content-Type': 'application/json'})

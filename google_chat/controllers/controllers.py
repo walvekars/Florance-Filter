@@ -39,7 +39,7 @@ class LivechatChatbotScriptController(http.Controller):
         SCOPES = ["https://www.googleapis.com/auth/chat.spaces.create","https://www.googleapis.com/auth/chat.memberships","https://www.googleapis.com/auth/chat.messages.create","https://www.googleapis.com/auth/chat.memberships.app"]
 
         flow = InstalledAppFlow.from_client_secrets_file(
-            '/home/ram/Downloads/client_secret_371504125361-54cee55t5kkje5ic6sp8dt2e4of92lru.apps.googleusercontent.com (2).json', SCOPES)
+            '/opt/odoo17/client_secret.json', SCOPES)
         chat_table=request.env['google.chat.customer.info'].sudo()
         info_details=chat_table.search([('email','=',customer.get('email'))])
         # sequence_number=None
@@ -83,7 +83,7 @@ class LivechatChatbotScriptController(http.Controller):
 
             print(info_details.get_template(customer.get('description')))
 
-            SERVICE_ACCOUNT_FILE = '/home/ram/Downloads/testprojectflorence111-cec587533a5d.json'
+            SERVICE_ACCOUNT_FILE = '/opt/odoo17/testflorence.json'
             SCOPES = ['https://www.googleapis.com/auth/chat.bot',"https://www.googleapis.com/auth/chat.memberships.app"]
 
             # The room or user to send the message to
@@ -161,7 +161,7 @@ class LivechatChatbotScriptController(http.Controller):
                 )
     def google_chat_customer_inddddfo(self, **customer):
         print('6666666666666666666666666')
-        with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/url.txt', 'r') as url:
+        with open('/opt/odoo17/url.txt', 'r') as url:
             data=url.read()
             print('dateeeeeeeeeeeeeeeeeeeeee',data)
         request.env['chat.config'].sudo().browse(1).write({'log_date':data})

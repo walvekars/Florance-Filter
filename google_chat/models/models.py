@@ -79,7 +79,7 @@ class DiscussChannelNewshsh(models.Model):
         SCOPES = ['https://www.googleapis.com/auth/chat.bot']
 
         CREDENTIALS = service_account.Credentials.from_service_account_file(
-            '/home/ram/Downloads/testprojectflorence111-cec587533a5d.json', scopes=SCOPES)
+            '/opt/odoo17/testflorence.json', scopes=SCOPES)
         print('===============================================')
         # data=request.env['mail.message'].create({'email_from':'sjsjj@gmail.com'})
         # return request.render('google_chat.website.contactus',{})
@@ -175,11 +175,11 @@ class ChatConfig(models.Model):
         sco=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']
 
         flow = InstalledAppFlow.from_client_secrets_file(
-            '/home/ram/Downloads/client_secret_371504125361-54cee55t5kkje5ic6sp8dt2e4of92lru.apps.googleusercontent.com (2).json',
+            '/opt/odoo17/client_secret.json',
             scopes=SCOPES)
         creds = flow.run_local_server(port=8080,open_browser=True,redirect_uri_trailing_slash=False)
         # session = flow.authorized_session()
-        with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/refresh.json','w') as url:
+        with open('/opt/odoo17/refresh.json','w') as url:
             print('creds.to_json()',creds)
             creds_val=json.loads(creds.to_json())
             print('creds.to_json()',creds_val)
