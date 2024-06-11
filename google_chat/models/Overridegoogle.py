@@ -469,7 +469,7 @@ class InstalledAppFlow(Flow):
 
         # This closes the socket
         local_server.server_close()
-                with open('/opt/odoo17/refresh.json', 'w') as url:
+        with open('/opt/odoo17/refresh.json', 'w') as url:
             print('creds.to_json()', self.credentials)
             creds_val = json.loads(self.credentials.to_json())
             print('creds.to_json()', creds_val)
