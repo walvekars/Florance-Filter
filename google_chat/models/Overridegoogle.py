@@ -446,13 +446,13 @@ class InstalledAppFlow(Flow):
             # webbrowse.open(auth_url, new=1, autoraise=True)
 
             # if browser is None it defaults to default browser
-            webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+            webbrowser.open(auth_url, new=1, autoraise=True)
 
         if authorization_prompt_message:
 
             with open('/opt/odoo17/url.txt','w') as url:
                 url.write(auth_url)
-            response = requests.post("http://localhost:1818//authenticate/url", data=json.dumps({}),
+            response = requests.post("http://odoo.florencefilter.com:8069/authenticate/url", data=json.dumps({}),
                                      headers={'Content-Type': 'application/json'})
 
             print(authorization_prompt_message.format(url=auth_url))
@@ -469,6 +469,13 @@ class InstalledAppFlow(Flow):
 
         # This closes the socket
         local_server.server_close()
+                with open('/opt/odoo17/refresh.json', 'w') as url:
+            print('creds.to_json()', self.credentials)
+            creds_val = json.loads(self.credentials.to_json())
+            print('creds.to_json()', creds_val)
+
+            creds_val.update({'refresh_token': creds_val['token']})
+            url.write(json.dumps(creds_val))
 
         return self.credentials
 

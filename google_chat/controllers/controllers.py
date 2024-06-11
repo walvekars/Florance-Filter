@@ -55,7 +55,7 @@ class LivechatChatbotScriptController(http.Controller):
             # full_path = os.path.join(os.getcwd(), 'custom_addons/google_chat/static/referesh_token.json')
             # print('full_path',full_path)
             # creds = Credentials.from_authorized_user_file(full_path, SCOPES)
-            creds = Credentials.from_authorized_user_file('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/refresh.json', SCOPES)
+            creds = Credentials.from_authorized_user_file('/opt/odoo17/refresh.json', SCOPES)
             # creds['refresh_token']=creds['token']
             # with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/refresh.json', 'r') as url:
             #     creds=url.read()
