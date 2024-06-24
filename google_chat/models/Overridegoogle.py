@@ -52,7 +52,9 @@ from base64 import urlsafe_b64encode
 import hashlib
 import json
 import logging
+from odoo.http import request
 
+import requests
 try:
     from secrets import SystemRandom
 except ImportError:  # pragma: NO COVER
@@ -259,6 +261,8 @@ class Flow(object):
         return url, state
 
     def fetch_token(self, **kwargs):
+        print('fetch_tokenfetch_tokenfetch_tokenfetch_tokenfetch_tokenfetch_tokenfetch_token',kwargs)
+
         """Completes the Authorization Flow and obtains an access token.
 
         This is the final step in the OAuth 2.0 Authorization Flow. This is
@@ -368,7 +372,8 @@ class InstalledAppFlow(Flow):
     _DEFAULT_WEB_SUCCESS_MESSAGE = (
         "The authentication flow has completed. You may close this window."
     )
-
+    def pass_creditentials(self):
+        return self.credentials
     def run_local_server(
         self,
         host="localhost",
@@ -428,17 +433,24 @@ class InstalledAppFlow(Flow):
                 for the user.
         """
         wsgi_app = _RedirectWSGIApp(success_message)
+        print('wsgi_appwsgi_appwsgi_app',wsgi_app)
         # Fail fast if the address is occupied
         wsgiref.simple_server.WSGIServer.allow_reuse_address = False
         local_server = wsgiref.simple_server.make_server(
             bind_addr or host, port, wsgi_app, handler_class=_WSGIRequestHandler
         )
         print('local_serverlocal_server',local_server)
+        print('kwargskwargskwargskwargskwargs',kwargs)
+
 
         redirect_uri_format = (
             "http://{}:{}/" if redirect_uri_trailing_slash else "http://{}:{}"
         )
         self.redirect_uri = redirect_uri_format.format(host, local_server.server_port)
+        print('self.redirect_uriself.redirect_uri',self.redirect_uri)
+        # self.redirect_uri = "https://odoo.florencefilter.com:8080"
+        # self.redirect_uri = "http://urn:ietf:wg:oauth:2.0:oob"
+        # self.redirect_uri = "http://localhost:/authen"
         auth_url, _ = self.authorization_url(**kwargs)
 
         if open_browser:
@@ -446,13 +458,14 @@ class InstalledAppFlow(Flow):
             # webbrowse.open(auth_url, new=1, autoraise=True)
 
             # if browser is None it defaults to default browser
-            webbrowser.open(auth_url, new=1, autoraise=True)
+            webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+            # request.redirect(auth_url)
 
         if authorization_prompt_message:
 
-            with open('/opt/odoo17/url.txt','w') as url:
+            with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/url.txt','w') as url:
                 url.write(auth_url)
-            response = requests.post("http://odoo.florencefilter.com:8069/authenticate/url", data=json.dumps({}),
+            response = requests.post("http://localhost:1818//authenticate/urls", data=json.dumps({'url':auth_url}),
                                      headers={'Content-Type': 'application/json'})
 
             print(authorization_prompt_message.format(url=auth_url))
@@ -463,19 +476,20 @@ class InstalledAppFlow(Flow):
         # Note: using https here because oauthlib is very picky that
         # OAuth 2.0 should only occur over https.
         authorization_response = wsgi_app.last_request_uri.replace("http", "https")
-        self.fetch_token(
+        data=self.fetch_token(
             authorization_response=authorization_response, audience=token_audience
         )
-
+        print('fetch_tokenfetch_token',data)
         # This closes the socket
         local_server.server_close()
-        with open('/opt/odoo17/refresh.json', 'w') as url:
+        with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/refresh.json', 'w') as url:
             print('creds.to_json()', self.credentials)
             creds_val = json.loads(self.credentials.to_json())
             print('creds.to_json()', creds_val)
 
             creds_val.update({'refresh_token': creds_val['token']})
             url.write(json.dumps(creds_val))
+        print('selffffffffffffffffffffffffffffffffffff',self.credentials)
 
         return self.credentials
 

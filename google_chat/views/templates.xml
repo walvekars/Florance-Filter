@@ -431,7 +431,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="log_date" widget="url" string="URl for Authentication"/>
+                        <field name="log_date" widget="url" />
 
 
                     </group>
@@ -448,7 +448,7 @@
             <tree>
 
                                       <field name="name"/>
-                                      <field name="log_date" string="URl for Authentication"/>
+                                      <field name="log_date"/>
 
 
             </tree>
