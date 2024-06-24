@@ -463,10 +463,10 @@ class InstalledAppFlow(Flow):
 
         if authorization_prompt_message:
 
-            with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/url.txt','w') as url:
+            with open('/opt/odoo17/url.txt','w') as url:
                 url.write(auth_url)
-            response = requests.post("http://localhost:1818//authenticate/urls", data=json.dumps({'url':auth_url}),
-                                     headers={'Content-Type': 'application/json'})
+            #response = requests.post("http://localhost:1818//authenticate/urls", data=json.dumps({'url':auth_url}),
+                                    # headers={'Content-Type': 'application/json'})
 
             print(authorization_prompt_message.format(url=auth_url))
 
@@ -482,7 +482,7 @@ class InstalledAppFlow(Flow):
         print('fetch_tokenfetch_token',data)
         # This closes the socket
         local_server.server_close()
-        with open('/home/ram/Downloads/odoo-17.0/custom_addons/google_chat/controllers/refresh.json', 'w') as url:
+        with open('/opt/odoo17/refresh.json', 'w') as url:
             print('creds.to_json()', self.credentials)
             creds_val = json.loads(self.credentials.to_json())
             print('creds.to_json()', creds_val)
