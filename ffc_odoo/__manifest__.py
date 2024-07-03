@@ -2,27 +2,27 @@
 {
     'name': "ffc_odoo",
 
-    'summary': "Short (1 phrase/line) summary of the module's purpose",
+    'summary': "website issues for ffc",
 
     'description': """
-Long description of module's purpose
+    website issues for ffc
     """,
 
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
+    'author': "DASARI RAMMOHAN",
+    'website': " ",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
+    'category': 'Services/services',
+    'version': '1.o',
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
     ],
@@ -34,6 +34,12 @@ Long description of module's purpose
     'assets': {
         'web.assets_frontend': [
             'ffc_odoo/static/src/js/website_hr_applicant_form.js'
-        ],}
+        ],},
+
+'installable': True,
+    'application': True,
+    'auto_install': False,
+    'license': 'LGPL-3',
 }
+
 
