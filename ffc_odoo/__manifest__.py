@@ -32,7 +32,7 @@
     ],
 
     'assets': {
-        'web.assets_frontend': [
+        'web.assests_frontend': [
             'ffc_odoo/static/src/js/website_hr_applicant_form.js'
         ],},
 
