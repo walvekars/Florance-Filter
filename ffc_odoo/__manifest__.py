@@ -34,7 +34,15 @@
     'assets': {
         'web.assests_frontend': [
             'ffc_odoo/static/src/js/website_hr_applicant_form.js'
-        ],},
+        ],
+        'website.assets_wysiwyg': [
+             'ffc_odoo/static/src/js/website_hr_recruitment_editor.js',
+        ],
+        'website.assets_editor': [
+            'ffc_odoo/static/src/js/systray_items/new_content.js',
+        ],
+
+    },
 
 'installable': True,
     'application': True,
