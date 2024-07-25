@@ -87,8 +87,7 @@ class DiscussChannelNew(models.Model):
 
     def _message_post_after_hook(self, message, msg_vals):
         res=super(DiscussChannelNew,self)._message_post_after_hook(message, msg_vals)
-        print('_message_post_after_hook', message, msg_vals)
-        print('message_value', msg_vals['body'])
+      
         if msg_vals['body'] and "The chat request has been canceled" not in msg_vals['body'] and "itchell Admin started a conversation" not in msg_vals['body'] and "left the conversation" not in msg_vals['body'] :
             result = message.send_chat(message=html2text.html2text(msg_vals["body"]))
             print(result)
@@ -106,8 +105,7 @@ class DiscussChannelNewshsh(models.Model):
 
 
     def send_chat(self, message):
-        # print('kwarg',kwarg)
-        # print('kwarg',kwarg.get('message', False))
+ 
         current_visitor = self.env['website.visitor']._get_visitor_from_request()
         # for current in current_visitor:
         live_chat_id=self.env['discuss.channel'].search([('livechat_active','=',True),('livechat_visitor_id','=',current_visitor.id)],limit=1)
@@ -221,13 +219,13 @@ class ChatConfig(models.Model):
         wsgi_app = _RedirectWSGIApp("Authenticated")
         wsgiref.simple_server.WSGIServer.allow_reuse_address = False
         local_server = wsgiref.simple_server.make_server(
-            None or "localhost", 8080, wsgi_app, handler_class=_WSGIRequestHandler
+            None or "florencefilter.com", 8080, wsgi_app, handler_class=_WSGIRequestHandler
         )
         print('local_serverlocal_server', local_server,local_server.__dict__['application'].__dict__)
 
 
         auth_url, state = data.authorization_url()
-        main_url=auth_url+'&redirect_uri='+base_url+'/authenticate/url'
+        main_url=auth_url+'&redirect_uri=https://florencefilter.com/authenticate/url'
         print('main_urlmain_url',main_url)
 
         global Flow_Object
