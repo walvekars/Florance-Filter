@@ -201,7 +201,7 @@ class LivechatChatbotScriptController(http.Controller):
                           'code': customer.get('code'),
                           'client_id': clients_data['web']['client_id'],
                           'client_secret': clients_data['web']['client_secret'],
-                          'redirect_uri': request.httprequest.host_url+'authenticate/url'
+                          'redirect_uri':'https://florencefilter.com/authenticate/url'
 
                           }
             auth_cert = {'timeout': None, 'auth': auth, 'verify': None, 'proxies': None, 'cert': None}
@@ -213,7 +213,7 @@ class LivechatChatbotScriptController(http.Controller):
                 creds_val=json.loads(data_response.text)
                 print('creds.to_json()',data_response.text)
 
-                creds_val.update({'refresh_token':creds_val['token'],'client_id':clients_data['web']['client_id'],'client_secret':clients_data['web']['client_secret'],"universe_domain": "googleapis.com", "account": "","token_uri": "https://oauth2.googleapis.com/token"})
+                #creds_val.update({'refresh_token':creds_val['access_token'],'client_id':clients_data['web']['client_id'],'client_secret':clients_data['web']['client_secret'],"universe_domain": "googleapis.com", "account": "","token_uri": "https://oauth2.googleapis.com/token"})
                 url.write(json.dumps(creds_val))
 
         # wsgi_app = _RedirectWSGIApp("Authenticated")
@@ -328,6 +328,4 @@ class LivechatChatbotScriptController(http.Controller):
 
         # data = request.httprequest.da6ta
         print('authauathautah')
-
-
 
