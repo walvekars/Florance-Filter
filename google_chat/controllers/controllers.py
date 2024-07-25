@@ -207,14 +207,17 @@ class LivechatChatbotScriptController(http.Controller):
             auth_cert = {'timeout': None, 'auth': auth, 'verify': None, 'proxies': None, 'cert': None}
             data_response = requests.post(url=url, headers=headers, data=data_param)
             print('data_responsedata_response', data_response.text)
+            dictiionary=json.loads(data_response.text)
 
             with open(creditentials_path+'refresh.json', 'w') as url:
-                print('creds.to_json()',data_response.text)
+                print('creds.to_json()',data_response.text,creditentials_path)
                 creds_val=json.loads(data_response.text)
                 print('creds.to_json()',data_response.text)
-
-                #creds_val.update({'refresh_token':creds_val['access_token'],'client_id':clients_data['web']['client_id'],'client_secret':clients_data['web']['client_secret'],"universe_domain": "googleapis.com", "account": "","token_uri": "https://oauth2.googleapis.com/token"})
-                url.write(json.dumps(creds_val))
+                dictiionary['refresh_token']=dictiionary['access_token']
+                dictiionary['client_id']=clients_data['web']['client_id']
+                dictiionary['client_secret']= clients_data['web']['client_secret']
+                # creds_val.update({'refresh_token':creds_val['access_token'],'client_id':clients_data['web']['client_id'],'client_secret':clients_data['web']['client_secret'],"universe_domain": "googleapis.com", "account": "","token_uri": "https://oauth2.googleapis.com/token"})
+                url.write(json.dumps(dictiionary))
 
         # wsgi_app = _RedirectWSGIApp("Authenticated")
         # print('flowwwwwwwwwwwwwwobjecttttttttttttt',Flow_Object)
